@@ -12,13 +12,9 @@ class SavedCalculation:
         return f"{clr.Fore.LIGHTBLACK_EX}{self.inp.ljust(25)} {clr.Fore.LIGHTBLACK_EX}= {clr.Style.RESET_ALL}{self.res.rjust(9)}{clr.Style.RESET_ALL}"
     
     def as_text_special(self):
-        if len(self.res) < 9:
-            inp_size = 25
-        else:
-            inp_size = 25-(len(self.res)-9)
-            
-        inp = self.inp if len(self.inp) < inp_size else self.inp[:inp_size-2] + ".."
-        
+        inp_size = 25 if len(self.res) < 9 else 25-(len(self.res)-9)
+        inp = self.inp if len(self.inp) < inp_size else f"{self.inp[:inp_size - 2]}.."
+
         return f"{inp.ljust(25)} {clr.Fore.LIGHTBLACK_EX}= {clr.Fore.CYAN}{self.res.rjust(9)}{clr.Style.RESET_ALL}"
 
 
@@ -35,25 +31,23 @@ class Calculator:
         os.system("cls")
         width = 41
         sep = '─' * (width - 2)
-        print('╭' + sep + '╮')
+        print(f'╭{sep}╮')
 
         fillers = 11 - len(self.reses)
         print('\n'.join([('│' + ' ' * (width - 2) + '│')] * fillers))
         if self.reses:
             if len(self.reses) > 1:
-                print('\n'.join(
-                    ['│ ' + c.as_text() + ' │' for c in self.reses[:-1]]
-                ))
-            print('├' + sep + '┤')
-            print('│ ' + self.reses[-1].as_text_special() + ' │')
+                print('\n'.join([f'│ {c.as_text()} │' for c in self.reses[:-1]]))
+            print(f'├{sep}┤')
+            print(f'│ {self.reses[-1].as_text_special()} │')
         else:
-            print('├' + sep + '┤')
+            print(f'├{sep}┤')
 
-        print('╰' + sep + '╯')
+        print(f'╰{sep}╯')
         try:
-            inp = input( clr.Fore.CYAN + ': ' + clr.Fore.BLUE)
+            inp = input(f'{clr.Fore.CYAN}: {clr.Fore.BLUE}')
         except KeyboardInterrupt:
-            print(clr.Fore.RED + "Quitted" + clr.Style.RESET_ALL)
+            print(f"{clr.Fore.RED}Quitted{clr.Style.RESET_ALL}")
             exit()
         print(clr.Style.RESET_ALL)
 
@@ -90,7 +84,7 @@ class Calculator:
             elif c:
                 temp += c
         if temp: parts.append(temp.strip())
-        
+
         try:
             res = eval()
         except:
